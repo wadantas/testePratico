@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Empresa";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/Empresa.js"></script>
+</head>
+<body>
+    <div class="container">
+        <<h2>Empresas</h2>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEmpresa" onclick="clearTextBox();">Nova Empresa</button><br /><br />
+        <input type="text" id="search" class="form-control" placeholder="Digite para buscar">
+        <button type="button" class="btn btn-primary" id="Buscar" onclick="Search()"><span class="fa fa-search"></span> Buscar</button>
+        <table class="table table-bordered table-hover" id="tableEmpresas">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Nome Fantasia
+                    </th>
+                    <th>
+                        CNPJ
+                    </th>
+                    <th>
+                        UF
+                    </th>
+                    <th>
+                        Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="modalEmpresa" tabindex="-1" role="dialog" aria-labelledby="modalEmpresaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="modalEmpresaLabel">Cadastro Empresa</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="IdEmpresa">ID</label>
+                            <input type="text" class="form-control" id="IdEmpresa" placeholder="Id" disabled="disabled" />
+                        </div>
+                        <div class="form-group">
+                            <label for="NomeFantasia">Nome Fantasia</label>
+                            <input type="text" class="form-control" id="NomeFantasia" placeholder="Nome Fantasia" />
+                        </div>
+                        <div class="form-group">
+                            <label for="CNPJ">CNPJ</label>
+                            <input type="text" class="form-control" id="CNPJ" placeholder="CNPJ" />
+                        </div>
+                        <datalist id="UF">
+                            <option value="AC" label="AC">
+                            <option value="AL">
+                            <option value="AP">
+                            <option value="AM">
+                            <option value="BA">
+                            <option value="CE">
+                            <option value="DF">
+                            <option value="ES">
+                            <option value="GO">
+                            <option value="MA">
+                            <option value="MT">
+                            <option value="MS">
+                            <option value="MG">
+                            <option value="PA">
+                            <option value="PB">
+                            <option value="PR">
+                            <option value="PE">
+                            <option value="PI">
+                            <option value="RJ">
+                            <option value="RN">
+                            <option value="RS">
+                            <option value="RO">
+                            <option value="RR">
+                            <option value="SC">
+                            <option value="SP">
+                            <option value="SE">
+                            <option value="TO">
+
+                        </datalist>
+                        <div class="form-group">
+                            <label for="UFList">UF</label>
+                            <input type="text" list="UF" class="form-control" id="UFList" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Adicionar</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Alterar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalFornec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dissmiss="modal"><span aria-hidden="true">×</span></button>*@
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Cadastro Fornecedor</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="Fornecedor">Fornecedor</label>
+                            @Html.DropDownList("Fornecedores", String.Empty)
+                        </div>
+                        <div class="form-group" style="display:none">
+                            <label for="Idade">Idade</label>
+                            <input type="text" class="form-control" id="Idade" placeholder="Idade" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="return AddFornecedor();">Adicionar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="modalDetalhe" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dissmiss="modal"><span aria-hidden="true">×</span></button>*@
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="modalDetalhe">Fornecedores Empresa</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <table class="table table-bordered table-hover" id="detalhesTable">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            IDFornecedor
+                                        </th>
+                                        <th>
+                                            Nome
+                                        </th>
+                                        <th>
+                                            CNPJ/CPF
+                                        </th>
+                                        <th>
+                                            Tipo Pessoa
+                                        </th>
+                                        <th>
+                                            Telefone
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="Detalhes"></tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
